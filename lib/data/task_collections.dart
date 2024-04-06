@@ -6,13 +6,18 @@ final taskCollections = [
   TaskCollection(
     idColor: Colors.red,
     tasks: [
-      Task.unscheduledDate(title: "Task",)
+      Task(title: "Sick todo task bro"),
+      Task(title: "Sick inprogress task bro", initialState: TaskState.inProgress),
+      Task(title: "Sick scheduled task bro", initialState: TaskState.scheduled),
+      Task(title: "Sick scheduled task bro", initialState: TaskState.completed)
+
     ], 
     title: "Collection"),
     TaskCollection(
     idColor: Colors.purple,
     tasks: [
-      Task.unscheduledDate(title: "Task 1")
+      //Task.scheduled(title: "Scheduled Example", scheduledDate: DateTime.now()),
+      //Task.inProgress(title: "In Progress Example")
     ], 
     title: "Collection 1")
 ];

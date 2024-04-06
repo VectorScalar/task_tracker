@@ -5,11 +5,11 @@ import 'package:task_tracker/widgets/task_collection_item.dart';
 
 
 class TaskCollectionList extends StatelessWidget {
-  const TaskCollectionList({super.key, required this.collections, required this.onRemoveCollection});
+  const TaskCollectionList({super.key, required this.collections, required this.onRemoveCollection, required this.onOpenCollection});
 
   final List<TaskCollection> collections;
   final void Function(TaskCollection task) onRemoveCollection;
-
+    final void Function(TaskCollection collection) onOpenCollection;
   // @override
   // Widget build(BuildContext context) {
     
@@ -19,10 +19,13 @@ class TaskCollectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     
+    
+
     return Expanded(
       child: ListView.builder(
           itemCount: collections.length,
-          itemBuilder: (ctx, index) => TaskCollectionItem(taskCollection: collections[index], isCollapsable: true, child: const Placeholder()),
+          itemBuilder: (ctx, index) => TaskCollectionItem(taskCollection: collections[index], onOpenTaskCollection: onOpenCollection,),
     ));
   }
 }

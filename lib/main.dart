@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:task_tracker/widgets/tracker.dart';
@@ -21,6 +20,14 @@ class MainApp extends StatelessWidget {
           foregroundColor: myscheme.onPrimary,
           elevation: 20,
           ),
+         
+            
+           
+            //filled: true,
+            //fillColor: myscheme.surface,
+          
+
+          
         navigationBarTheme: const NavigationBarThemeData().copyWith(
           indicatorColor: myscheme.primaryContainer,
           surfaceTintColor: Colors.white,
