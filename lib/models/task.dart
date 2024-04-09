@@ -46,7 +46,7 @@ class Task {
     scheduledDate = null;
     _taskState = TaskState.todo;
   }
-
+  
   void stepUpState() {
     if (states[_taskState] != null) {
       _taskState = states[_taskState]!.nextState;

@@ -34,10 +34,24 @@ class MainApp extends StatelessWidget {
           shadowColor: Colors.black,
          
         ),
+
+        sliderTheme: SliderThemeData().copyWith(
+            showValueIndicator: ShowValueIndicator.always
+        ),
+
+        iconTheme: IconThemeData().copyWith(
+          color: myscheme.primary
+        ),
+
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+            backgroundColor: myscheme.primary
+          )
+        ),
         cardTheme: const CardTheme().copyWith(
           shape: const ContinuousRectangleBorder(),
           elevation: 0,
-          margin: const EdgeInsets.only(top: 10)
+          margin: const EdgeInsets.only(top: 0, bottom: 0)
         )
       )
         
