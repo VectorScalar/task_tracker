@@ -11,7 +11,6 @@ class TaskCollection{
   final Color idColor;
   final List<Task> tasks;
   final List<Task> completedTasks = [];
-
   
 
   String get abreviatedName{

@@ -25,8 +25,17 @@ class MainApp extends StatelessWidget {
            
             //filled: true,
             //fillColor: myscheme.surface,
+        expansionTileTheme: ExpansionTileThemeData().copyWith(
+          backgroundColor: myscheme.primary,
+          textColor: myscheme.onPrimary,
+          collapsedTextColor: myscheme.onPrimary,
+          iconColor: myscheme.onPrimary,
+          collapsedIconColor: myscheme.onPrimary,
+          tilePadding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+          collapsedBackgroundColor: myscheme.primary,
           
-
+        ),
+        
           
         navigationBarTheme: const NavigationBarThemeData().copyWith(
           indicatorColor: myscheme.primaryContainer,

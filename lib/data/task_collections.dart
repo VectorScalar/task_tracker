@@ -8,7 +8,7 @@ final taskCollections = [
     tasks: [
       Task(title: "Sick todo task bro"),
       Task(title: "Sick inprogress task bro", initialState: TaskState.inProgress),
-      Task(title: "Sick scheduled task bro", initialState: TaskState.scheduled),
+      Task(title: "Sick s task bro", initialState: TaskState.scheduled),
       Task(title: "Sick scheduled task bro", initialState: TaskState.completed)
 
     ], 

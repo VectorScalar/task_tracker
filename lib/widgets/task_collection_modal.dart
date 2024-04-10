@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:task_tracker/data/task_collections.dart';
+import 'package:task_tracker/models/task.dart';
 import 'package:task_tracker/models/task_collection.dart';
+import 'package:task_tracker/widgets/task_item.dart';
 import 'package:task_tracker/widgets/task_list.dart';
 
 class TaskCollectionModal extends StatefulWidget {
@@ -17,6 +20,16 @@ class TaskCollectionModal extends StatefulWidget {
 }
 
 class _OpenTaskCollectionModal extends State<TaskCollectionModal> {
+  var stateTitles = states.values.toList();
+  var stateValues = states.keys.toList();
+
+  void onTaskModified(Task task){
+    setState(() {
+      // TODO: Replace with an actual random id/key
+      widget.taskCollection.tasks[widget.taskCollection.tasks.indexWhere((t) => task.title == t.title)] = task;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -38,8 +51,19 @@ class _OpenTaskCollectionModal extends State<TaskCollectionModal> {
       Expanded(
         child: Container(
           color: Theme.of(context).colorScheme.secondary,
-          child: TaskList(taskCollection: widget.taskCollection, onRemoveTask: (task) {})),
-      )
+          child: ListView.builder(
+            itemCount: states.length,
+            itemBuilder: (BuildContext context, index){
+            return ExpansionTile(
+              initiallyExpanded: true,
+              title: Text(stateTitles[index].stateName), 
+              children: widget.taskCollection.tasks.map((t) => TaskItem(key: ValueKey(t.id),t, onTaskModified)).toList().where((taskItem) => taskItem.task.taskState == stateValues[index]).toList());
+          }
+          
+          )
+      
+          //child: TaskList(taskCollection: widget.taskCollection, onRemoveTask: (task) {})),
+          ))
     ]);
   }
 }

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:task_tracker/models/task.dart';
 
 class TaskItem extends StatefulWidget{
-  const TaskItem(this.task, {super.key});
+  const TaskItem(this.task,this.onModifyTask, {super.key});
  final Task task;
+ final Function(Task task) onModifyTask;
   @override
   State<TaskItem> createState() {
     // TODO: implement createState
@@ -41,9 +42,10 @@ class TaskItem extends StatefulWidget{
               const SizedBox(
                 width: 5,
               ),
-              FilledButton(onPressed: () => {setState(() {
+              FilledButton(onPressed: (){
                 widget.task.stepUpState();
-              })}, child: const Text("GO"))
+                widget.onModifyTask(widget.task);
+              }, child: const Text("GO"))
             ],
           )
         ],
@@ -66,9 +68,10 @@ class TaskItem extends StatefulWidget{
             ]
             ),
           ),
-          Checkbox(value: true, onChanged: (value) => setState(() {
+          Checkbox(value: true, onChanged: (value){
             widget.task.stepDownState();
-          }))
+            widget.onModifyTask(widget.task);
+          })
           
           
         ],
@@ -98,17 +101,19 @@ class TaskItem extends StatefulWidget{
             child: Text("${sliderVal.toStringAsFixed(0)}/$sliderValMax", style: const TextStyle().copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),)),
           Expanded(child: Slider(
             // TODO: Possibly add a confirmation box to confirm that the task should be marked as complete/wait for check box to fill prior to switching it to completed
-            onChangeEnd: (value) => {if(value >= sliderValMax){setState(() => widget.task.stepUpState())}},
+            onChangeEnd: (value){if(value >= sliderValMax){widget.task.stepUpState(); widget.onModifyTask(widget.task);}},
             onChanged: (value){setState(() {
               sliderVal = value;
             });
             }, 
           value: sliderVal,max: sliderValMax)),
 
-          Checkbox(value: completed, onChanged: (value) => setState(() {
+          Checkbox(value: completed, onChanged: (value){
             completed = true;
             widget.task.stepUpState();
-          }),)
+            widget.onModifyTask(widget.task);
+          
+          },)
         ],
       ),
     );

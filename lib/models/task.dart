@@ -1,6 +1,9 @@
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/v4.dart';
 
 final formatter = DateFormat.yMd();
+final uUid = Uuid();
 
 enum Priority { lowest, low, normal, high, highest }
 
@@ -24,6 +27,7 @@ var states = {
 };
 
 class Task {
+  final String id;
   final String title;
   final Priority priority;
   DateTime? scheduledDate;
@@ -31,7 +35,7 @@ class Task {
   TaskState get taskState => _taskState;
 
   //Task.scheduled({required this.title, required this.scheduledDate, this.priority = Priority.normal}) : _taskStateManager = TaskStateManager(scheduledState);
-  Task({required this.title,this.priority = Priority.normal, TaskState initialState = TaskState.todo}) : _taskState = initialState;
+  Task({required this.title,this.priority = Priority.normal, TaskState initialState = TaskState.todo}) : _taskState = initialState, id = uUid.v4();
 
   // Task.inProgress({required this.title, this.priority = Priority.normal}) : _taskStateManager = TaskStateManager(inProgressState);
   //Potentially add a way to define a custom taskstate
@@ -46,7 +50,7 @@ class Task {
     scheduledDate = null;
     _taskState = TaskState.todo;
   }
-  
+
   void stepUpState() {
     if (states[_taskState] != null) {
       _taskState = states[_taskState]!.nextState;
