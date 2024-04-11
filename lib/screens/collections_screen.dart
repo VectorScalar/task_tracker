@@ -20,7 +20,7 @@ class CollectionScreen extends Screen {
 
 
 class _CollectionScreenState extends State<CollectionScreen> {
-
+  //Need to update collection as edited
    void _openTaskCollectionModal(TaskCollection taskCollection) {
     showModalBottomSheet(context: context, builder: (ctx) => TaskCollectionModal(taskCollection: taskCollection,), isScrollControlled: true);
 

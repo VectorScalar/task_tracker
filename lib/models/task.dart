@@ -30,12 +30,13 @@ class Task {
   final String id;
   final String title;
   final Priority priority;
+  double? currentProgress, progressGoal;
   DateTime? scheduledDate;
   TaskState _taskState;
   TaskState get taskState => _taskState;
 
   //Task.scheduled({required this.title, required this.scheduledDate, this.priority = Priority.normal}) : _taskStateManager = TaskStateManager(scheduledState);
-  Task({required this.title,this.priority = Priority.normal, TaskState initialState = TaskState.todo}) : _taskState = initialState, id = uUid.v4();
+  Task({required this.title,this.priority = Priority.normal, TaskState initialState = TaskState.todo, this.currentProgress, this.progressGoal}) : _taskState = initialState, id = uUid.v4();
 
   // Task.inProgress({required this.title, this.priority = Priority.normal}) : _taskStateManager = TaskStateManager(inProgressState);
   //Potentially add a way to define a custom taskstate
