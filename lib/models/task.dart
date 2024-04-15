@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 import 'package:uuid/v4.dart';
 
 final formatter = DateFormat.yMd();
-final uUid = Uuid();
+const uUid = Uuid();
 
 enum Priority { lowest, low, normal, high, highest }
 
@@ -30,25 +30,29 @@ class Task {
   final String id;
   final String title;
   final Priority priority;
+  double? currentProgress, progressGoal;
   DateTime? scheduledDate;
   TaskState _taskState;
   TaskState get taskState => _taskState;
 
-  //Task.scheduled({required this.title, required this.scheduledDate, this.priority = Priority.normal}) : _taskStateManager = TaskStateManager(scheduledState);
-  Task({required this.title,this.priority = Priority.normal, TaskState initialState = TaskState.todo}) : _taskState = initialState, id = uUid.v4();
-
-  // Task.inProgress({required this.title, this.priority = Priority.normal}) : _taskStateManager = TaskStateManager(inProgressState);
-  //Potentially add a way to define a custom taskstate
+  Task({required this.title,this.priority = Priority.normal, TaskState initialState = TaskState.todo, this.currentProgress, this.progressGoal}) : _taskState = initialState, id = uUid.v4();
 
   void scheduleTask(DateTime date) {
     scheduledDate = date;
     _taskState = TaskState.scheduled;
-    //_taskStateManager.setState(scheduledState);
   }
 
   void unScheduleTask() {
     scheduledDate = null;
     _taskState = TaskState.todo;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is Task) {
+      return id == other.id;
+    }
+    return false;
   }
 
   void stepUpState() {
@@ -70,4 +74,8 @@ class Task {
   String getFormattedDate(DateTime date) {
     return formatter.format(date);
   }
+  
+  @override
+  int get hashCode => id.hashCode;
+  
 }
