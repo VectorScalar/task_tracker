@@ -51,8 +51,11 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
 
     return Scaffold(
       //TODO: Change appbar text to an input field to allow for editing of collection name
-      appBar: AppBar(title: Text(widget.taskCollection.title),),
+      appBar: AppBar(
+        title: Text(widget.taskCollection.title),
+        ),
       body: content,
+      
     );
   }
 }

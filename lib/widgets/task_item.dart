@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_tracker/models/task.dart';
 
@@ -48,26 +49,23 @@ class _TaskItemState extends ConsumerState<TaskItem> {
 
   Widget completedDisplay() {
     return ListTile(
-      title: Row(
+      title: Stack(
+        alignment: Alignment.centerLeft,
         children: [
-          Expanded(
-            child: Stack(alignment: Alignment.centerLeft, children: [
-              const Divider(
-                color: Colors.grey,
-                thickness: 2,
-                endIndent: 5,
-              ),
-              Text(widget.task.title)
-            ]),
+          const Divider(
+            color: Colors.grey,
+            thickness: 2,
+            endIndent: 5,
           ),
-          Checkbox(
+          Text(widget.task.title),
+        ],
+      ),
+      trailing: Checkbox(
               value: true,
               onChanged: (value) {
                 widget.task.stepDownState();
                 widget.onModifyTask(widget.task);
-              })
-        ],
-      ),
+              }),
     );
   }
 
