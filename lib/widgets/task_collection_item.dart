@@ -3,14 +3,13 @@ import 'package:task_tracker/models/task.dart';
 import 'package:task_tracker/models/task_collection.dart';
 
 class TaskCollectionItem extends StatelessWidget {
-
+  
   //Will likely need a listender to listen for changes in the taask
   const TaskCollectionItem({super.key, required this.taskCollection, required this.onOpenTaskCollection});
   final TaskCollection taskCollection;
-  final Function(TaskCollection) onOpenTaskCollection;
+  final void Function() onOpenTaskCollection;
   @override
   Widget build(BuildContext context) {
-
     return Card(
       child: ListTile(
         leading: CircleAvatar(backgroundColor: taskCollection.idColor, child: Text(taskCollection.abreviatedName)),
@@ -27,14 +26,14 @@ class TaskCollectionItem extends StatelessWidget {
             transform: Matrix4.rotationZ(.5),
             alignment: Alignment.center,
             child: IconButton(
-              icon: Icon(Icons.push_pin_outlined),
+              icon: const Icon(Icons.push_pin_outlined),
               iconSize: 15,
               
-              selectedIcon: Icon(Icons.push_pin),
+              selectedIcon: const Icon(Icons.push_pin),
               onPressed: (){},
               ),
           ),
-          onTap: () => onOpenTaskCollection(taskCollection),
+          onTap: () => onOpenTaskCollection(),
       ),
     );
     

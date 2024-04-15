@@ -1,11 +1,15 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_tracker/widgets/tracker.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(
+    const ProviderScope(child: MainApp()
+    )
+    );
 }
-ColorScheme myscheme = ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 32, 63, 149));
+ColorScheme myscheme = ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 32, 63, 149));
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -25,13 +29,13 @@ class MainApp extends StatelessWidget {
            
             //filled: true,
             //fillColor: myscheme.surface,
-        expansionTileTheme: ExpansionTileThemeData().copyWith(
+        expansionTileTheme: const ExpansionTileThemeData().copyWith(
           backgroundColor: myscheme.primary,
           textColor: myscheme.onPrimary,
           collapsedTextColor: myscheme.onPrimary,
           iconColor: myscheme.onPrimary,
           collapsedIconColor: myscheme.onPrimary,
-          tilePadding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+          tilePadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
           collapsedBackgroundColor: myscheme.primary,
           
         ),
@@ -44,11 +48,11 @@ class MainApp extends StatelessWidget {
          
         ),
 
-        sliderTheme: SliderThemeData().copyWith(
+        sliderTheme: const SliderThemeData().copyWith(
             showValueIndicator: ShowValueIndicator.always
         ),
 
-        iconTheme: IconThemeData().copyWith(
+        iconTheme: const IconThemeData().copyWith(
           color: myscheme.primary
         ),
 

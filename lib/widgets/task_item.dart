@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_tracker/models/task.dart';
 
-class TaskItem extends StatefulWidget {
-  const TaskItem(this.task, this.onModifyTask, {super.key});
+class TaskItem extends ConsumerStatefulWidget {
+  const TaskItem({super.key, required this.task, required this.onModifyTask});
   final Task task;
   final Function(Task task) onModifyTask;
   @override
-  State<TaskItem> createState() {
-    // TODO: implement createState
+  ConsumerState<TaskItem> createState() {
     return _TaskItemState();
   }
 }
 
-class _TaskItemState extends State<TaskItem> {
+class _TaskItemState extends ConsumerState<TaskItem> {
   Widget todoDisplay() {
     return ListTile(
       title: Row(
@@ -35,6 +35,7 @@ class _TaskItemState extends State<TaskItem> {
               FilledButton(
                   onPressed: () {
                     widget.task.stepUpState();
+              
                     widget.onModifyTask(widget.task);
                   },
                   child: const Text("GO"))
@@ -123,7 +124,8 @@ class _TaskItemState extends State<TaskItem> {
             onChanged: (value) {
               value = true;
               widget.task.stepUpState();
-              widget.onModifyTask(widget.task);}) : null,
+              widget.onModifyTask(widget.task);
+              }) : null,
       subtitle: widget.task.progressGoal != null && widget.task.progressGoal != null ? Row(
         children: [
           // TODO: On Slider End Create a popup to ask if wed like to mark the task as completed
@@ -139,7 +141,6 @@ class _TaskItemState extends State<TaskItem> {
         // Todo Listtile
         child: switch (widget.task.taskState) {
       TaskState.inProgress => inProgressDisplay(),
-      // TODO: Handle this case.
       TaskState.completed => completedDisplay(),
       // TODO: Handle this case.
       TaskState.scheduled => todoDisplay(),
