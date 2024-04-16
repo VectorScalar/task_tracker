@@ -17,11 +17,35 @@ class TaskCollectionItem extends StatelessWidget {
         subtitle: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Todo: ${taskCollection.tasks.where((task) => task.taskState == TaskState.todo).length}"),
-            Text("In Progress: ${taskCollection.tasks.where((task) => task.taskState == TaskState.inProgress).length}"),
-            Text("Scheduled: ${taskCollection.tasks.where((task) => task.taskState == TaskState.scheduled).length}"),
-            Text("Completed: ${taskCollection.tasks.where((task) => task.taskState == TaskState.completed).length}")
-          ],),
+            //Todo
+            Row(
+              children: [
+                const Icon(Icons.check_box_outlined),
+                Text(": ${taskCollection.tasks.where((task) => task.taskState == TaskState.todo).length}")
+              ],
+            ),
+            //In Progress
+             Row(
+              children: [
+                const Icon(Icons.run_circle_outlined,),
+                Text(": ${taskCollection.tasks.where((task) => task.taskState == TaskState.inProgress).length}")
+              ],
+            ),
+            //Completed
+             Row(
+              children: [
+                const Icon(Icons.check_box_outlined,),
+                Text(": ${taskCollection.tasks.where((task) => task.taskState == TaskState.completed).length}")
+              ],
+            ),
+            //Scheduled
+             Row(
+              children: [
+                const Icon(Icons.schedule_outlined,),
+                Text(": ${taskCollection.tasks.where((task) => task.taskState == TaskState.scheduled).length}"),
+              ],
+            ),
+            ],),
           trailing: Transform(
             transform: Matrix4.rotationZ(.5),
             alignment: Alignment.center,
