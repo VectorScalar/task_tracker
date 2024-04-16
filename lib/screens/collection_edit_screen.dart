@@ -21,7 +21,7 @@ class CollectionEditScreen extends StatefulWidget {
 class _CollectionEditScreen extends State<CollectionEditScreen> {
   var stateTitles = states.values.toList();
   var stateValues = states.keys.toList();
-
+  
   void _modifyTask(Task task){
     if(widget.taskCollection.tasks.contains(task)){
       setState(() {
@@ -38,6 +38,7 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
             itemCount: states.length,
             itemBuilder: (BuildContext context, index){
             return ExpansionTile(
+              key: PageStorageKey(stateTitles[index].stateName),
               initiallyExpanded: true,
               title: Text(stateTitles[index].stateName), 
               children: widget.taskCollection.tasks.map((t) => TaskItem(
@@ -50,9 +51,34 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
 
 
     return Scaffold(
-      //TODO: Change appbar text to an input field to allow for editing of collection name
+      //TODO: Create custom stateful textformfield to change color on focus
       appBar: AppBar(
-        title: Text(widget.taskCollection.title),
+        title: TextFormField(
+          
+          initialValue: widget.taskCollection.title, 
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            color: Colors.white
+          ),
+          onChanged: (newValue) {
+              print("save val");
+              widget.taskCollection.title = newValue;
+              //TODO: Causing problems
+              widget.onEditCollection(widget.taskCollection);
+            
+          },
+          onEditingComplete: () => print("complete"),
+          cursorColor: Theme.of(context).colorScheme.onPrimary,
+          decoration: InputDecoration().copyWith(
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            // focusColor: Colors.white,
+            // hoverColor: Colors.white,
+            // fillColor: Colors.white
+          ),
+          
+        ),
+        //title: Text(widget.taskCollection.title),
+        actions: [IconButton(onPressed: (){}, icon: const Icon(Icons.add)), SizedBox(width: 5,)],
         ),
       body: content,
       
