@@ -35,16 +35,28 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
   @override
   Widget build(BuildContext context) {
     Widget content = ListView.builder(
-            itemCount: states.length,
+            itemCount: states.length + 1,
             itemBuilder: (BuildContext context, index){
-            return ExpansionTile(
-              key: PageStorageKey(stateTitles[index].stateName),
+            return index == 0 ? 
+          TextFormField(
+            //Potentially call onEditCollection if the description is to appear somewhere else
+            initialValue: widget.taskCollection.desc,
+            onChanged: (value) => widget.taskCollection.desc = value,
+                maxLines: 3,
+                decoration: const InputDecoration().copyWith(
+                  hintText: "...Add Description",
+                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15)
+                ),
+                
+                ) : 
+            ExpansionTile(
+              key: PageStorageKey(stateTitles[index - 1].stateName),
               initiallyExpanded: true,
-              title: Text(stateTitles[index].stateName), 
+              title: Text(stateTitles[index - 1].stateName), 
               children: widget.taskCollection.tasks.map((t) => TaskItem(
                 key: ValueKey(t.id),
                 task: t,
-                onModifyTask: _modifyTask,)).toList().where((taskItem) => taskItem.task.taskState == stateValues[index]).toList());
+                onModifyTask: _modifyTask,)).toList().where((taskItem) => taskItem.task.taskState == stateValues[index - 1]).toList());
           }
           
           );
@@ -60,13 +72,10 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
             color: Colors.white
           ),
           onChanged: (newValue) {
-              print("save val");
               widget.taskCollection.title = newValue;
-              //TODO: Causing problems
               widget.onEditCollection(widget.taskCollection);
             
           },
-          onEditingComplete: () => print("complete"),
           cursorColor: Theme.of(context).colorScheme.onPrimary,
           decoration: InputDecoration().copyWith(
             enabledBorder: InputBorder.none,

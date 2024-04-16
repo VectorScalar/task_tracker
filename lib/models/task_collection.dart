@@ -6,9 +6,10 @@ import 'package:uuid/uuid.dart';
 var uuid = const Uuid();
 
 class TaskCollection{
-  TaskCollection({required this.tasks, required this.idColor, required this.title}) : id = uuid.v4();
+  TaskCollection({required this.tasks,required this.desc, required this.idColor, required this.title}) : id = uuid.v4();
   final String id;
   String title;
+  String desc;
   Color idColor;
   final List<Task> tasks;
   

@@ -70,7 +70,6 @@ class _TaskItemState extends ConsumerState<TaskItem> {
   }
 
   List<Widget> addProgressBar(){
-
     return [Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
