@@ -23,10 +23,11 @@ class MainApp extends StatelessWidget {
         appBarTheme: const AppBarTheme().copyWith(
           backgroundColor: myscheme.primary,
           foregroundColor: myscheme.onPrimary,
-          elevation: 20,
+          surfaceTintColor: null,
+          //elevation: 20,
           ),
          
-            
+          
            
             //filled: true,
             //fillColor: myscheme.surface,
