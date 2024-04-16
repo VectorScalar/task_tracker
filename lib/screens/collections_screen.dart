@@ -38,15 +38,14 @@ class CollectionsScreen extends StatefulWidget {
   @override
   Widget build(BuildContext context) {
     var collections = collectionData;
-    return Expanded(
-      child: ListView.builder(
-          itemCount: collections.length,
-          itemBuilder: (ctx, index) => TaskCollectionItem(
-            taskCollection: collections[index],
-            onOpenTaskCollection: (){
-              _openCollectionEditScreen(context, collections[index]);
-            }),
-    ));
+    return ListView.builder(
+        itemCount: collections.length,
+        itemBuilder: (ctx, index) => TaskCollectionItem(
+          taskCollection: collections[index],
+          onOpenTaskCollection: (){
+            _openCollectionEditScreen(context, collections[index]);
+          }),
+        );
   }
 
 }
