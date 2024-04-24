@@ -1,4 +1,5 @@
 
+
 import 'package:flutter/material.dart';
 import 'package:task_tracker/models/task.dart';
 import 'package:task_tracker/models/task_collection.dart';
@@ -19,36 +20,55 @@ class CollectionEditScreen extends StatefulWidget {
 
 
 class _CollectionEditScreen extends State<CollectionEditScreen> {
-  var stateTitles = states.values.toList();
-  var stateValues = states.keys.toList();
-  
+  final stateTitles = states.values.toList();
+  final stateValues = states.keys.toList();
+  final TextEditingController titleEditController = TextEditingController();
+  final TextEditingController descEditController = TextEditingController();
+  bool showTextFieldConfirm = false;
+
+  @override
+  void dispose() {
+    titleEditController.dispose();
+    descEditController.dispose();
+    super.dispose();
+  }
+
   void _modifyTask(Task task){
     if(widget.taskCollection.tasks.contains(task)){
       setState(() {
         widget.taskCollection.tasks[widget.taskCollection.tasks.indexOf(task)] = task;
         widget.onEditCollection(widget.taskCollection);
       });
-   
-    }
+    }    
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
+    
+   descEditController.text = widget.taskCollection.desc;
+    titleEditController.text = widget.taskCollection.title;
+    
     Widget content = ListView.builder(
             itemCount: states.length + 1,
             itemBuilder: (BuildContext context, index){
             return index == 0 ? 
-          TextFormField(
-            //Potentially call onEditCollection if the description is to appear somewhere else
-            initialValue: widget.taskCollection.desc,
-            onChanged: (value) => widget.taskCollection.desc = value,
-                maxLines: 3,
-                decoration: const InputDecoration().copyWith(
-                  hintText: "...Add Description",
-                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15)
-                ),
-                
-                ) : 
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: 
+          
+               TextFormField(
+                  controller: descEditController,
+                  onSaved: (newValue){if(newValue != null)widget.taskCollection.desc = newValue;},
+                  // onFieldSubmitted: (value) => widget.taskCollection.desc = value,
+                  maxLines: 3,
+                  decoration: const InputDecoration().copyWith(
+                        hintText: "...Add Description",
+                      ),
+                      
+                      ),
+          ) : 
             ExpansionTile(
               key: PageStorageKey(stateTitles[index - 1].stateName),
               initiallyExpanded: true,
@@ -62,35 +82,66 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
           );
 
 
+   
     return Scaffold(
-      //TODO: Create custom stateful textformfield to change color on focus
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: TextFormField(
+        title:
+          TextFormField(
+            controller: titleEditController,
+            autovalidateMode: AutovalidateMode.disabled,
+            validator: (value) => value == null || value.isEmpty ? "Minimum of 1 char required for title" : null,
+            onSaved: (newValue){
+              if(newValue != null){
+                widget.taskCollection.title = newValue;
+                widget.onEditCollection(widget.taskCollection);
+                }},
+            // onFieldSubmitted: (val){
+            //   if(titleEditController.text.isNotEmpty){
+            //     widget.taskCollection.title = val;
+            //     widget.onEditCollection(widget.taskCollection);
+            //   }
+            // },
+            style: Theme.of(context).textTheme.titleLarge,
+            decoration: InputDecoration().copyWith(
+              
+             isDense: true,
+             enabledBorder: InputBorder.none             
+            ),
           
-          initialValue: widget.taskCollection.title, 
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            color: Colors.white
-          ),
-          onChanged: (newValue) {
-              widget.taskCollection.title = newValue;
-              widget.onEditCollection(widget.taskCollection);
             
-          },
-          cursorColor: Theme.of(context).colorScheme.onPrimary,
-          decoration: InputDecoration().copyWith(
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            // focusColor: Colors.white,
-            // hoverColor: Colors.white,
-            // fillColor: Colors.white
           ),
-          
-        ),
-        //title: Text(widget.taskCollection.title),
-        actions: [IconButton(onPressed: (){}, icon: const Icon(Icons.add)), SizedBox(width: 5,)],
+ 
+        actions: [IconButton(onPressed: (){}, icon: const Icon(Icons.add)), const SizedBox(width: 5,)],
         ),
       body: content,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: showTextFieldConfirm ? Padding(
+        padding: EdgeInsets.only(bottom: getBottomInsets(context)),
+        child: Container(
+          padding: const EdgeInsets.only(right: 20),
+          decoration: const BoxDecoration(color: Colors.red),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: (){}, 
+                icon: const Icon(Icons.close)), 
+              IconButton(onPressed: (){}, icon: const Icon(Icons.check))],),
+        ),
+      ) : null,
       
     );
   }
+}
+
+
+double getBottomInsets(BuildContext context) {
+   if (MediaQuery.of(context).viewInsets.bottom >
+       MediaQuery.of(context).viewPadding.bottom) {
+      return MediaQuery.of(context).viewInsets.bottom -
+             MediaQuery.of(context).viewPadding.bottom;
+   }
+   return 0;
 }

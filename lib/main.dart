@@ -1,57 +1,95 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_tracker/widgets/tracker.dart';
 
 void main() {
   runApp(
-    const ProviderScope(child: MainApp()
-    )
+    MainApp()
     );
 }
-ColorScheme myscheme = ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 32, 63, 149));
+//ColorScheme myscheme = ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 0, 0));
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme myscheme = ColorScheme.fromSeed(
+      seedColor: const Color.fromRGBO(0, 155, 209, 1),
+  //    brightness: MediaQuery.platformBrightnessOf(context)
+      );
+
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData().copyWith(
+        colorScheme: myscheme,
+        
+          //  appBarTheme: const AppBarTheme().copyWith(
+          // backgroundColor: myscheme.primary,
+          // foregroundColor: myscheme.onPrimary,
+          // surfaceTintColor: myscheme.surfaceTint,
+          // ),
+        expansionTileTheme: const ExpansionTileThemeData().copyWith(
+          
+          backgroundColor: myscheme.tertiary,
+          
+          textColor: myscheme.onTertiary,
+          collapsedTextColor: myscheme.onTertiary,
+          iconColor: myscheme.onTertiary,
+          collapsedIconColor: myscheme.onTertiary,
+          //tilePadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+          collapsedBackgroundColor: myscheme.tertiary,
+          
+        ),
+
+         cardTheme: const CardTheme().copyWith(
+          shape: const ContinuousRectangleBorder(),
+          elevation: 0,
+          surfaceTintColor: myscheme.surfaceTint,
+          margin: const EdgeInsets.only(top: 0, bottom: 0)
+          
+      ),
+        /*
+        checkboxTheme: CheckboxThemeData().copyWith(
+          fillColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            if(states.contains(MaterialState.selected))
+            {
+              return myscheme.tertiary;
+            } else {
+              return myscheme.surface;
+            }
+          })
+        ),
+        //dividerColor: myscheme.secondaryContainer,
         scaffoldBackgroundColor: myscheme.background,
         appBarTheme: const AppBarTheme().copyWith(
           backgroundColor: myscheme.primary,
           foregroundColor: myscheme.onPrimary,
-          surfaceTintColor: null,
-          //elevation: 20,
+          surfaceTintColor: myscheme.surfaceTint,
           ),
          
           
            
             //filled: true,
             //fillColor: myscheme.surface,
-        expansionTileTheme: const ExpansionTileThemeData().copyWith(
-          backgroundColor: myscheme.primary,
-          textColor: myscheme.onPrimary,
-          collapsedTextColor: myscheme.onPrimary,
-          iconColor: myscheme.onPrimary,
-          collapsedIconColor: myscheme.onPrimary,
-          tilePadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-          collapsedBackgroundColor: myscheme.primary,
-          
-        ),
         
+
+    
           
         navigationBarTheme: const NavigationBarThemeData().copyWith(
           indicatorColor: myscheme.primaryContainer,
-          surfaceTintColor: Colors.white,
+          elevation: 2,
+          surfaceTintColor: myscheme.surfaceTint,
           shadowColor: Colors.black,
          
         ),
 
         sliderTheme: const SliderThemeData().copyWith(
-            showValueIndicator: ShowValueIndicator.always
+            showValueIndicator: ShowValueIndicator.always,
+            activeTrackColor: myscheme.primary,
+            
+            thumbColor: myscheme.primary
         ),
 
         iconTheme: const IconThemeData().copyWith(
@@ -66,8 +104,10 @@ class MainApp extends StatelessWidget {
         cardTheme: const CardTheme().copyWith(
           shape: const ContinuousRectangleBorder(),
           elevation: 0,
+          surfaceTintColor: myscheme.surfaceTint,
           margin: const EdgeInsets.only(top: 0, bottom: 0)
-        )
+          */
+      //)
       )
         
       ,

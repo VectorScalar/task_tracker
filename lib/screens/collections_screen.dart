@@ -4,13 +4,6 @@ import 'package:task_tracker/models/task_collection.dart';
 import 'package:task_tracker/widgets/task_collection_item.dart';
 import 'package:task_tracker/screens/collection_edit_screen.dart';
 
-
-///Summary
-///Screen to be used for displaying tasks that are active throughout all collections and can be filtered
-
-
-
-
 class CollectionsScreen extends StatefulWidget {
   const CollectionsScreen({super.key});
 
@@ -47,5 +40,4 @@ class CollectionsScreen extends StatefulWidget {
           }),
         );
   }
-
 }

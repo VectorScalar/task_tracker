@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:task_tracker/main.dart';
 import 'package:task_tracker/models/task.dart';
 
-class TaskItem extends ConsumerStatefulWidget {
+class TaskItem extends StatefulWidget {
   const TaskItem({super.key, required this.task, required this.onModifyTask});
   final Task task;
   final Function(Task task) onModifyTask;
   @override
-  ConsumerState<TaskItem> createState() {
+  State<TaskItem> createState() {
     return _TaskItemState();
   }
 }
 
-class _TaskItemState extends ConsumerState<TaskItem> {
+class _TaskItemState extends State<TaskItem> {
   Widget todoDisplay() {
     return ListTile(
       title: Row(
@@ -72,8 +71,10 @@ class _TaskItemState extends ConsumerState<TaskItem> {
   List<Widget> addProgressBar(){
     return [Container(
               padding: const EdgeInsets.all(10),
+              //color: Theme.of(context).colorScheme.primary,
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primaryContainer,
+                  //backgroundBlendMode: BlendMode.color,
                   borderRadius: const BorderRadius.all(Radius.circular(5))),
               child: Text(
                 "${widget.task.currentProgress!.toStringAsFixed(0)}/${widget.task.progressGoal}",
@@ -82,6 +83,7 @@ class _TaskItemState extends ConsumerState<TaskItem> {
               )),
           Expanded(
               child: Slider(
+
                   // TODO: Possibly add a confirmation box to confirm that the task should be marked as complete/wait for check box to fill prior to switching it to completed
                   onChangeEnd: (value) {
                     if (value >= widget.task.progressGoal!) {
