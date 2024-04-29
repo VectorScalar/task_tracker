@@ -28,19 +28,9 @@ class CollectionEditScreen extends StatefulWidget {
 class _CollectionEditScreen extends State<CollectionEditScreen> {
   final stateTitles = states.values.toList();
   final stateValues = states.keys.toList();
-  final TextEditingController titleEditController = TextEditingController();
-  final TextEditingController descEditController = TextEditingController();
-  
+
   final ConfirmInputManager inputManager = ConfirmInputManager(scaffoldKey);
 
-  
-
-  @override
-  void dispose() {
-    titleEditController.dispose();
-    descEditController.dispose();
-    super.dispose();
-  }
 
   void _modifyTask(Task task) {
     if (widget.taskCollection.tasks.contains(task)) {
@@ -52,28 +42,10 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
     }
   }
 
-  saveTitleField(String value) {
-    if (value.trim().isNotEmpty) {
-      widget.taskCollection.title = value;
-      widget.onEditCollection(widget.taskCollection);
-    } else {
-      titleEditController.text = widget.taskCollection.title;
-    }
-  }
 
-  saveDescField(String value) {
-    if (value.trim().isNotEmpty) {
-      widget.taskCollection.desc = value;
-    } else {
-      descEditController.text = "";
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    descEditController.text = widget.taskCollection.desc;
-    titleEditController.text = widget.taskCollection.title;
-
     Widget content = ListView.builder(
         itemCount: states.length + 1,
         itemBuilder: (BuildContext context, index) {
