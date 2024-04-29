@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:task_tracker/main.dart';
 import 'package:task_tracker/models/task.dart';
 import 'package:task_tracker/models/task_collection.dart';
 

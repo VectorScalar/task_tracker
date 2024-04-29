@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:task_tracker/models/confirm_input_manager.dart';
 
 class FormFieldWithConfirm extends StatefulWidget {
-  FormFieldWithConfirm(
+  const FormFieldWithConfirm(
       {super.key,
       required this.onValueSaved,
       required this.inputManager,

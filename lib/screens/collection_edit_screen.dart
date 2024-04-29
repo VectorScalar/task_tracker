@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:task_tracker/models/confirm_input_manager.dart';
 import 'package:task_tracker/models/task.dart';
 import 'package:task_tracker/models/task_collection.dart';
-import 'package:task_tracker/widgets/confirm_input_bar.dart';
 import 'package:task_tracker/widgets/formfield_withconfir.dart';
 import 'package:task_tracker/widgets/task_item.dart';
 
@@ -87,7 +86,7 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
                     inputManager: inputManager,
                     maxLines: null,
                     minLines: 3,
-                    decoration: InputDecoration().copyWith(
+                    decoration: const InputDecoration().copyWith(
                       hintText: "....Add Description"
                     )
                   )
@@ -112,6 +111,7 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
       key: scaffoldKey,
       appBar: AppBar(
         title:
+            //TODO: Refactor to allow either the passing of a TextFormField or Extend TextFormField to take a confirminputmanager
              FormFieldWithConfirm(
               validator: (p0) {
                 if(p0!.length <= 1){

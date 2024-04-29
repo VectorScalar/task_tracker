@@ -4,7 +4,7 @@ import 'package:task_tracker/widgets/tracker.dart';
 
 void main() {
   runApp(
-    MainApp()
+    const MainApp()
     );
 }
 //ColorScheme myscheme = ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 0, 0));

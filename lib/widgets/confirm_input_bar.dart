@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:task_tracker/widgets/formfield_withconfir.dart';
 
 class ConfirmInputBar extends StatelessWidget{
   const ConfirmInputBar({super.key, required this.onSubmit, required this.onCancel});
@@ -17,7 +16,7 @@ class ConfirmInputBar extends StatelessWidget{
       onPopInvoked: (didPop){
         if(didPop){
             FocusManager.instance.primaryFocus?.unfocus();
-        } else debugPrint("DIdnt pop");
+        }
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -27,7 +26,7 @@ class ConfirmInputBar extends StatelessWidget{
           color: Colors.grey.withOpacity(0.5),
           spreadRadius: 5,
           blurRadius: 7,
-          offset: Offset(0, 3), // changes position of shadow
+          offset: const Offset(0, 3), // changes position of shadow
         ),
       ],
           color: Theme.of(context).cardColor),
