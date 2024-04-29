@@ -8,56 +8,127 @@ class ConfirmInputManager{
   bool _isOpen = false;
 
 
-  final List<GlobalKey<FormFieldState>> fields = [];
-  late GlobalKey<FormFieldState> currentField;
+  final List<ConfirmInputData> inputs = [];
+  final List<ConfirmInputData> activeInputs = [];
+  late ConfirmInputData currentInput;
   late PersistentBottomSheetController controller;
 
   void onSubmit(){
-    if(currentField.currentState!.validate())
+    if(currentInput.formKey.currentState!.validate())
     {
-      currentField.currentState!.save();
+      currentInput.formKey.currentState!.save();
+      
     } else {
-      currentField.currentState!.reset();}
+      currentInput.formKey.currentState!.reset();}
 
     closeModal();
   }
 
-  void onLostFocus(GlobalKey<FormFieldState> formKey){
-    if(formKey == currentField){
-      closeModal();
+  void registerInput(GlobalKey<FormFieldState> formKey, FocusNode focusNode){
+    ConfirmInputData newInputData = ConfirmInputData(formKey: formKey, focusNode: focusNode);
+    inputs.add(newInputData);
+    focusNode.addListener(onFocusChanged);
+  }
+
+  void unRegisterInput(GlobalKey<FormFieldState> formKey, FocusNode focusNode){
+    inputs.removeWhere((input) => input.formKey == formKey);
+    focusNode.removeListener(onFocusChanged);
+  }
+
+  void onFocusChanged(){
+    List<ConfirmInputData> noFocus = [];
+
+    for(int i = 0; i < inputs.length; i++){
+      if(inputs[i].focusNode.hasFocus){
+        if(!_isOpen){
+          controller = scaffoldKey.currentState!.showBottomSheet((context) => ConfirmInputBar(onSubmit: onSubmit, onCancel: onCancel), enableDrag: false);
+          _isOpen = true;
+        }
+
+        currentInput = inputs[i];
+      } 
+      //If the input doesnt have focus
+      else {
+        noFocus.add(inputs[i]);
+      }
     }
+
+    if(noFocus.length == inputs.length){
+      closeModal();
+    } else{
+      noFocus.clear();
+    }
+    //if Lost focus?
+    //lost focus = to the currentInput focus?{
+    //close modal}
+
+    // if(_isOpen){
+    //   for(int i = 0; i < inputs.length; i++){
+    //     if(inputs[i].focusNode.hasFocus){
+    //       currentInput = inputs[i];
+    //       return;
+    //   }
+    //   }
+    // }
+
+    // if(!_isOpen){
+    //   controller = scaffoldKey.currentState!.showBottomSheet((context) => ConfirmInputBar(onSubmit: onSubmit, onCancel: onCancel), enableDrag: false);
+    //   _isOpen = true;
+    // }
+    // //If we have yet to open the modal
+    // for(int i = 0; i < inputs.length; i++){
+    //   if(inputs[i].focusNode.hasFocus){
+    //     currentInput = inputs[i];
+    //     debugPrint("Show Modal");
+    //     if(!_isOpen){
+       
+    //        controller = scaffoldKey.currentState!.showBottomSheet((context) => ConfirmInputBar(onSubmit: onSubmit, onCancel: onCancel), enableDrag: false);
+    //        _isOpen = true;
+    //        return;
+    //     }
+    //   } else if(inputs[i] != currentInput){
+    //     inputs[i].formKey.currentState!.reset();
+    //   }
+    // }
+
+    // if(_isOpen){
+    // //If no input field has the primary focus close the modal
+    // closeModal();
+    // }
+    
+    // if(_isOpen == false){
+    //   if(currentInput)
+    //   controller = scaffoldKey.currentState!.showBottomSheet((context) => ConfirmInputBar(onSubmit: onSubmit, onCancel: onCancel), enableDrag: false);
+    // }
+    // if(_isOpen && currentInput.focusNode.hasPrimaryFocus){
+
+    // }
   }
 
   void onCancel(){
-    currentField.currentState!.reset();
+    currentInput.formKey.currentState!.reset();
     
     closeModal();
   }
 
-  void openModal(GlobalKey<FormFieldState> formKey){
-  
-    if(!_isOpen){
-      controller = scaffoldKey.currentState!.showBottomSheet((context) => ConfirmInputBar(onSubmit: onSubmit, onCancel: onCancel), enableDrag: false);
-      controller.closed.then((value) => _isOpen = false);
-      _isOpen = true;
-      currentField = formKey;
-
-      
-    } 
-    //if already open dont reopen the modal
-    else {
-      //atttempting to open from other field
-        currentField = formKey;
-    }
-    
-    
-  }
 
   void closeModal(){
     if(_isOpen){
+        currentInput.focusNode.unfocus();
+        //currentInput.focusNode.unfocus();
         controller.close();
+        _isOpen = false;
     }
   }
 
   
+}
+
+
+class ConfirmInputData{
+  const ConfirmInputData({required this.formKey, required this.focusNode});
+
+  final GlobalKey<FormFieldState> formKey;
+  final FocusNode focusNode;
+
 }

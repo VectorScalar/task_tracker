@@ -36,11 +36,11 @@ class ConfirmInputBar extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IconButton(onPressed: (){
-              Navigator.pop(context);
+              //Navigator.pop(context);
               onCancel();},
               icon: const Icon(Icons.close, color: Colors.red,)), 
             IconButton(onPressed: (){
-              Navigator.pop(context);
+              //Navigator.pop(context);
               
               onSubmit();}, 
             icon: const Icon(Icons.check, color: Colors.lightGreen,))],),
