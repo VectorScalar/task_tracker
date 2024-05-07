@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:task_tracker/models/confirm_input_manager.dart';
 import 'package:task_tracker/models/task.dart';
 import 'package:task_tracker/models/task_collection.dart';
-import 'package:task_tracker/widgets/formfield_withconfir.dart';
+import 'package:task_tracker/screens/task_edit_screen.dart';
+import 'package:task_tracker/widgets/formfield_withconfirm.dart';
 import 'package:task_tracker/widgets/task_item.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -41,6 +42,11 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
       });
     }
   }
+
+  //  Future<void> _openEditTaskScreen(BuildContext context) async{
+  //   //Navigator.of(context).push(MaterialPageRoute(builder: ((ctx) => TaskEditModal.newTask()),));
+  //   await showDialog<void>(context: context, builder: (BuildContext context) => SimpleDialog(title: Text("Title"),children: [],));
+  // }
 
 
 
@@ -102,7 +108,18 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
                 widget.onEditCollection(widget.taskCollection);
                 },),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+          IconButton(onPressed: () {
+              showDialog(
+                barrierColor: Theme.of(context).dialogBackgroundColor,
+                context: context, 
+                builder: (BuildContext context) {
+                return Dialog.fullscreen(child: TaskEditScreen.newTask(taskCollection: widget.taskCollection,),);
+              });
+              //TaskUtilities.showNewTaskModal(context);
+              //_openEditTaskScreen(context);
+              //Dialog.fullscreen(child: TaskEditModal(),));
+          
+          }, icon: const Icon(Icons.add)),
           const SizedBox(
             width: 5,
           )
