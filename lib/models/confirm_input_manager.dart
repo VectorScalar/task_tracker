@@ -3,7 +3,6 @@ import 'package:task_tracker/widgets/confirm_input_bar.dart';
 
 class ConfirmInputManager{
   ConfirmInputManager(this.scaffoldKey);
-  
   GlobalKey<ScaffoldState> scaffoldKey;
   bool _isOpen = false;
 
@@ -43,9 +42,13 @@ class ConfirmInputManager{
         if(!_isOpen){
           controller = scaffoldKey.currentState!.showBottomSheet((context) => ConfirmInputBar(onSubmit: onSubmit, onCancel: onCancel), enableDrag: false);
           _isOpen = true;
+          currentInput = inputs[i];
+        } else{
+          currentInput.formKey.currentState!.reset();
+          currentInput = inputs[i];
         }
 
-        currentInput = inputs[i];
+        
       } 
       //If the input doesnt have focus
       else {
@@ -58,51 +61,7 @@ class ConfirmInputManager{
     } else{
       noFocus.clear();
     }
-    //if Lost focus?
-    //lost focus = to the currentInput focus?{
-    //close modal}
 
-    // if(_isOpen){
-    //   for(int i = 0; i < inputs.length; i++){
-    //     if(inputs[i].focusNode.hasFocus){
-    //       currentInput = inputs[i];
-    //       return;
-    //   }
-    //   }
-    // }
-
-    // if(!_isOpen){
-    //   controller = scaffoldKey.currentState!.showBottomSheet((context) => ConfirmInputBar(onSubmit: onSubmit, onCancel: onCancel), enableDrag: false);
-    //   _isOpen = true;
-    // }
-    // //If we have yet to open the modal
-    // for(int i = 0; i < inputs.length; i++){
-    //   if(inputs[i].focusNode.hasFocus){
-    //     currentInput = inputs[i];
-    //     debugPrint("Show Modal");
-    //     if(!_isOpen){
-       
-    //        controller = scaffoldKey.currentState!.showBottomSheet((context) => ConfirmInputBar(onSubmit: onSubmit, onCancel: onCancel), enableDrag: false);
-    //        _isOpen = true;
-    //        return;
-    //     }
-    //   } else if(inputs[i] != currentInput){
-    //     inputs[i].formKey.currentState!.reset();
-    //   }
-    // }
-
-    // if(_isOpen){
-    // //If no input field has the primary focus close the modal
-    // closeModal();
-    // }
-    
-    // if(_isOpen == false){
-    //   if(currentInput)
-    //   controller = scaffoldKey.currentState!.showBottomSheet((context) => ConfirmInputBar(onSubmit: onSubmit, onCancel: onCancel), enableDrag: false);
-    // }
-    // if(_isOpen && currentInput.focusNode.hasPrimaryFocus){
-
-    // }
   }
 
   void onCancel(){
