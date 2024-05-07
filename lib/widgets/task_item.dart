@@ -77,7 +77,7 @@ class _TaskItemState extends State<TaskItem> {
                   //backgroundBlendMode: BlendMode.color,
                   borderRadius: const BorderRadius.all(Radius.circular(5))),
               child: Text(
-                "${widget.task.currentProgress!.toStringAsFixed(0)}/${widget.task.progressGoal}",
+                "${widget.task.taskProgress!.currentProgress.toStringAsFixed(0)}/${widget.task.taskProgress!.progressGoal}",
                 style: const TextStyle().copyWith(
                     color: Theme.of(context).colorScheme.onPrimaryContainer),
               )),
@@ -86,18 +86,18 @@ class _TaskItemState extends State<TaskItem> {
 
                   // TODO: Possibly add a confirmation box to confirm that the task should be marked as complete/wait for check box to fill prior to switching it to completed
                   onChangeEnd: (value) {
-                    if (value >= widget.task.progressGoal!) {
+                    if (value >= widget.task.taskProgress!.progressGoal) {
                       widget.task.stepUpState();
                       widget.onModifyTask(widget.task);
                     }
                   },
                   onChanged: (value) {
                     setState(() {
-                      widget.task.currentProgress = value;
+                      widget.task.taskProgress!.currentProgress = value;
                     });
                   },
-                  value: widget.task.currentProgress!,
-                  max: widget.task.progressGoal!)),
+                  value: widget.task.taskProgress!.currentProgress,
+                  max: widget.task.taskProgress!.progressGoal)),
                   Checkbox(
             value: false,
             onChanged: (value) {
@@ -118,14 +118,14 @@ class _TaskItemState extends State<TaskItem> {
         ],
       ),
       
-      trailing: widget.task.progressGoal == null && widget.task.progressGoal == null ?  Checkbox(
+      trailing: widget.task.taskProgress == null ?  Checkbox(
             value: false,
             onChanged: (value) {
               value = true;
               widget.task.stepUpState();
               widget.onModifyTask(widget.task);
               }) : null,
-      subtitle: widget.task.progressGoal != null && widget.task.progressGoal != null ? Row(
+      subtitle: widget.task.taskProgress != null ? Row(
         children: [
           // TODO: On Slider End Create a popup to ask if wed like to mark the task as completed
           ...addProgressBar(),
@@ -144,8 +144,6 @@ class _TaskItemState extends State<TaskItem> {
       // TODO: Handle this case.
       TaskState.scheduled => todoDisplay(),
       TaskState.todo => todoDisplay(),
-      // TODO: Handle this case.
-      TaskState.noState => todoDisplay(),
     });
   }
 }
