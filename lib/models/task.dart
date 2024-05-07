@@ -1,44 +1,71 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 final formatter = DateFormat.yMd();
 const uUid = Uuid();
 
-enum Priority { lowest, low, normal, high, highest }
+enum Priority { 
+  lowest(Icon(Icons.keyboard_double_arrow_down_rounded), "Lowest"), 
+  low(Icon(Icons.keyboard_arrow_down_rounded), "Low"), 
+  normal(Icon(Icons.remove_rounded), "Normal"), 
+  high(Icon(Icons.keyboard_arrow_up_rounded), "High"), 
+  highest(Icon(Icons.keyboard_double_arrow_up_rounded), "Highest");
 
-enum TaskState { inProgress, completed, scheduled, todo, noState }
+  const Priority(this.priorityIcon, this.priorityName);
+  final Icon priorityIcon;
+  final String priorityName;
+  }
+
+
+enum TaskState { inProgress, completed, scheduled, todo}
 
 class StateInfo {
-  StateInfo(this.stateName, this.nextState, this.prevState);
-  String stateName;
-  TaskState nextState;
-  TaskState prevState;
+  const StateInfo({required this.stateName, required this.nextState, required this.prevState, required this.stateIcon});
+  final String stateName;
+  final TaskState nextState;
+  final TaskState prevState;
+  final Icon stateIcon;
+}
+
+class TaskProgress{
+  TaskProgress({this.currentProgress = 0, this.progressGoal = 1});
+  double currentProgress;
+  double progressGoal;
 }
 
 var states = {
-  TaskState.completed:
-      StateInfo("Completed", TaskState.todo, TaskState.inProgress),
+  TaskState.todo: 
+      const StateInfo(stateName:  "Todo", prevState: TaskState.inProgress, nextState: TaskState.inProgress, stateIcon: Icon(Icons.check_box_outline_blank_rounded)),
+  // TaskState.scheduled:
+  //     const StateInfo(stateName:  "Scheduled", prevState:  TaskState.inProgress, nextState:  TaskState.todo, stateIcon: Icon(Icons.schedule)),
   TaskState.inProgress:
-      StateInfo("In Progress", TaskState.completed, TaskState.todo),
-  TaskState.todo: StateInfo("Todo", TaskState.inProgress, TaskState.noState),
-  TaskState.scheduled:
-      StateInfo("Scheduled", TaskState.inProgress, TaskState.todo)
+      const StateInfo(stateName:  "Doing", nextState:  TaskState.completed, prevState: TaskState.todo, stateIcon: Icon(Icons.run_circle_outlined,)),
+  TaskState.completed:
+      const StateInfo(stateName:  "Done", nextState:  TaskState.todo, prevState: TaskState.inProgress, stateIcon: Icon(Icons.check_box_rounded)),
 };
 
 class Task {
   final String id;
-  final String title;
-  final Priority priority;
-  double? currentProgress, progressGoal;
+  String title;
+  Priority priority;
+
+  //TODO: refactor to list for adding multiple fields
+  TaskProgress? taskProgress;
+  //double? currentProgress, progressGoal;
   DateTime? scheduledDate;
   TaskState _taskState;
   TaskState get taskState => _taskState;
 
-  Task({required this.title,this.priority = Priority.normal, TaskState initialState = TaskState.todo, this.currentProgress, this.progressGoal}) : _taskState = initialState, id = uUid.v4();
+  Task({this.title = "Untitled Task",this.priority = Priority.normal, TaskState initialState = TaskState.todo, this.taskProgress}) : _taskState = initialState, id = uUid.v4();
 
   void scheduleTask(DateTime date) {
     scheduledDate = date;
     _taskState = TaskState.scheduled;
+  }
+
+  void setState(TaskState state){
+    _taskState = state;
   }
 
   void unScheduleTask() {
