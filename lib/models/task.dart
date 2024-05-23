@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:task_tracker/models/task_collection.dart';
 import 'package:uuid/uuid.dart';
 
 final formatter = DateFormat.yMd();
@@ -18,6 +19,19 @@ enum Priority {
   }
 
 
+enum UnitOption{
+  none(label: "none", unit: ""),
+  feet(label: "ft", unit: "ft"),
+  inches(label: "in", unit: "in");
+
+  const UnitOption({required this.label, required this.unit});
+
+  final String label;
+  final String unit;
+  
+}
+
+
 enum TaskState { inProgress, completed, scheduled, todo}
 
 class StateInfo {
@@ -29,9 +43,12 @@ class StateInfo {
 }
 
 class TaskProgress{
-  TaskProgress({this.currentProgress = 0, this.progressGoal = 1});
+  TaskProgress({this.currentProgress = 0, this.progressGoal = 1, this.progressName = "Untitled", this.unit = UnitOption.none}) : id = uuid.v4();
   double currentProgress;
   double progressGoal;
+  String progressName;
+  UnitOption unit;
+  final String id;
 }
 
 var states = {
@@ -50,14 +67,12 @@ class Task {
   String title;
   Priority priority;
 
-  //TODO: refactor to list for adding multiple fields
-  TaskProgress? taskProgress;
-  //double? currentProgress, progressGoal;
+  List<TaskProgress> taskProgressables;
   DateTime? scheduledDate;
   TaskState _taskState;
   TaskState get taskState => _taskState;
 
-  Task({this.title = "Untitled Task",this.priority = Priority.normal, TaskState initialState = TaskState.todo, this.taskProgress}) : _taskState = initialState, id = uUid.v4();
+  Task({this.title = "Untitled Task",this.priority = Priority.normal}) : _taskState = TaskState.todo, id = uUid.v4(), taskProgressables = [];
 
   void scheduleTask(DateTime date) {
     scheduledDate = date;

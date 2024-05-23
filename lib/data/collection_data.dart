@@ -8,12 +8,11 @@ final collectionData = [
     idColor: Colors.red,
     tasks: [
       Task(title: "Sick todo task bro",),
-      Task(title: "Sick inprogress task bro", initialState: TaskState.inProgress, taskProgress: TaskProgress(progressGoal: 20)),
-      Task(title: "Sick s task bro", initialState: TaskState.scheduled),
-      Task(title: "Sick scheduled task bro", initialState: TaskState.completed, taskProgress: TaskProgress(progressGoal: 10)),
+      Task(title: "Sick inprogress task bro"),
+      Task(title: "Sick s task bro"),
+      Task(title: "Sick scheduled task bro"),
            Task(title: "Sick todo task bro",),
-      Task(title: "Sick inprogress task bro", initialState: TaskState.inProgress, taskProgress: TaskProgress(progressGoal: 5)),
- 
+      Task(title: "Sick inprogress task bro"),
     ], 
     title: "Collection"),
     TaskCollection(

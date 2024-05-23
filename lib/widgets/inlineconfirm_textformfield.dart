@@ -8,7 +8,6 @@ class InlineTextFormField extends StatefulWidget{
 
   @override
   State<InlineTextFormField> createState() {
-    // TODO: implement createState
     return _InlineTextFormFieldState();
   }
 }
@@ -61,7 +60,7 @@ class _InlineTextFormFieldState extends State<InlineTextFormField>{
               focusNode.unfocus();
             });
           },
-          icon: Icon(Icons.close)),
+          icon: const Icon(Icons.close)),
         Expanded(
           child: Focus(
           focusNode: focusNode,

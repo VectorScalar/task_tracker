@@ -68,7 +68,7 @@ class _TaskItemState extends State<TaskItem> {
     );
   }
 
-  List<Widget> addProgressBar(){
+  List<Widget> addProgressBar(TaskProgress taskProgress){
     return [Container(
               padding: const EdgeInsets.all(10),
               //color: Theme.of(context).colorScheme.primary,
@@ -77,7 +77,7 @@ class _TaskItemState extends State<TaskItem> {
                   //backgroundBlendMode: BlendMode.color,
                   borderRadius: const BorderRadius.all(Radius.circular(5))),
               child: Text(
-                "${widget.task.taskProgress!.currentProgress.toStringAsFixed(0)}/${widget.task.taskProgress!.progressGoal}",
+                "${taskProgress.currentProgress.toStringAsFixed(0)}/${taskProgress.progressGoal}",
                 style: const TextStyle().copyWith(
                     color: Theme.of(context).colorScheme.onPrimaryContainer),
               )),
@@ -86,23 +86,23 @@ class _TaskItemState extends State<TaskItem> {
 
                   // TODO: Possibly add a confirmation box to confirm that the task should be marked as complete/wait for check box to fill prior to switching it to completed
                   onChangeEnd: (value) {
-                    if (value >= widget.task.taskProgress!.progressGoal) {
-                      widget.task.stepUpState();
+                    if (value >= taskProgress.progressGoal) {
+                      //widget.task.stepUpState();
                       widget.onModifyTask(widget.task);
                     }
                   },
                   onChanged: (value) {
                     setState(() {
-                      widget.task.taskProgress!.currentProgress = value;
+                      taskProgress.currentProgress = value;
                     });
                   },
-                  value: widget.task.taskProgress!.currentProgress,
-                  max: widget.task.taskProgress!.progressGoal)),
+                  value: taskProgress.currentProgress,
+                  max: taskProgress.progressGoal)),
                   Checkbox(
             value: false,
             onChanged: (value) {
               value = true;
-              widget.task.stepUpState();
+              //widget.task.stepUpState();
               widget.onModifyTask(widget.task);
             },
           )];
@@ -118,17 +118,19 @@ class _TaskItemState extends State<TaskItem> {
         ],
       ),
       
-      trailing: widget.task.taskProgress == null ?  Checkbox(
+      trailing: widget.task.taskProgressables.isEmpty ?  Checkbox(
             value: false,
             onChanged: (value) {
               value = true;
               widget.task.stepUpState();
               widget.onModifyTask(widget.task);
               }) : null,
-      subtitle: widget.task.taskProgress != null ? Row(
+      subtitle: widget.task.taskProgressables.isNotEmpty ? Row(
         children: [
-          // TODO: On Slider End Create a popup to ask if wed like to mark the task as completed
-          ...addProgressBar(),
+          for(TaskProgress progress in widget.task.taskProgressables)
+             ...addProgressBar(progress)
+          
+         ,
         ],
       ) : null,
     );

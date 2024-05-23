@@ -109,12 +109,17 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
                 },),
         actions: [
           IconButton(onPressed: () {
-              showDialog(
+              showDialog<Task>(
                 barrierColor: Theme.of(context).dialogBackgroundColor,
                 context: context, 
                 builder: (BuildContext context) {
-                return Dialog.fullscreen(child: TaskEditScreen.newTask(taskCollection: widget.taskCollection,),);
-              });
+                return Dialog.fullscreen(child: TaskEditScreen.newTask(initialCollection: widget.taskCollection,),);
+              }).then((value){
+                if(value != null){
+                setState(() {
+                  widget.taskCollection.tasks.add(value);
+                });
+              }});
               //TaskUtilities.showNewTaskModal(context);
               //_openEditTaskScreen(context);
               //Dialog.fullscreen(child: TaskEditModal(),));
