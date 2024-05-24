@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:task_tracker/models/task.dart';
-
+import 'package:task_tracker/screens/task_edit_screen.dart';
+//TODO Modify to allow for on tap do be passed only once and to call opentaskedit
 class TaskItem extends StatefulWidget {
-  const TaskItem({super.key, required this.task, required this.onModifyTask});
+  const TaskItem({super.key, required this.task, required this.onModifyTask, required this.openTaskEdit});
   final Task task;
   final Function(Task task) onModifyTask;
+  final Function(Task task) openTaskEdit;
   @override
   State<TaskItem> createState() {
     return _TaskItemState();
@@ -13,8 +15,10 @@ class TaskItem extends StatefulWidget {
 }
 
 class _TaskItemState extends State<TaskItem> {
-  Widget todoDisplay() {
+
+  ListTile todoDisplay() {
     return ListTile(
+      onTap: () => widget.openTaskEdit(widget.task),
       title: Row(
         textBaseline: TextBaseline.alphabetic,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -46,8 +50,9 @@ class _TaskItemState extends State<TaskItem> {
     );
   }
 
-  Widget completedDisplay() {
+  ListTile completedDisplay() {
     return ListTile(
+      onTap: () => widget.openTaskEdit(widget.task),
       title: Stack(
         alignment: Alignment.centerLeft,
         children: [
@@ -108,8 +113,9 @@ class _TaskItemState extends State<TaskItem> {
           )];
   }
 
-  Widget inProgressDisplay() {
+  ListTile inProgressDisplay() {
     return ListTile(
+      onTap: () => widget.openTaskEdit(widget.task),
       title: Row(
         textBaseline: TextBaseline.alphabetic,
         crossAxisAlignment: CrossAxisAlignment.center,

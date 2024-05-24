@@ -78,6 +78,15 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
                             key: ValueKey(t.id),
                             task: t,
                             onModifyTask: _modifyTask,
+                            openTaskEdit: (task) {
+                              TaskEditScreen.showTaskDialog(context, widget.taskCollection, task).then((task){
+                                if(task != null){
+                                  setState(() {
+                                    widget.taskCollection.tasks[widget.taskCollection.tasks.indexOf(task)] = task;
+                                  });
+                                }
+                              });
+                            },
                           ))
                       .toList()
                       .where((taskItem) =>
@@ -109,12 +118,13 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
                 },),
         actions: [
           IconButton(onPressed: () {
-              showDialog<Task>(
-                barrierColor: Theme.of(context).dialogBackgroundColor,
-                context: context, 
-                builder: (BuildContext context) {
-                return Dialog.fullscreen(child: TaskEditScreen.newTask(initialCollection: widget.taskCollection,),);
-              }).then((value){
+              // showDialog<Task>(
+              //   barrierColor: Theme.of(context).dialogBackgroundColor,
+              //   context: context, 
+              //   builder: (BuildContext context) {
+              //   return Dialog.fullscreen(child: TaskEditScreen(initialCollection: widget.taskCollection,),);
+              // })
+              TaskEditScreen.showTaskDialog(context, widget.taskCollection).then((value){
                 if(value != null){
                 setState(() {
                   widget.taskCollection.tasks.add(value);

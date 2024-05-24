@@ -3,14 +3,22 @@ import 'package:task_tracker/models/task.dart';
 import 'package:task_tracker/models/task_collection.dart';
 import 'package:task_tracker/widgets/task_edit_widgets/taskedit_expansiontile.dart';
 
+
+
 class TaskEditScreen extends StatefulWidget {
-  const TaskEditScreen.editTask(
-      {super.key, required this.task, required this.initialCollection});
-  TaskEditScreen.newTask({super.key, required this.initialCollection})
-      : task = Task();
+  const TaskEditScreen({super.key, required this.initialCollection, required this.task});
   final Task task;
 
   final TaskCollection initialCollection;
+
+  static Future<Task?> showTaskDialog(BuildContext context, TaskCollection initialCollection, [Task? task]){
+    return showDialog<Task>(
+      barrierColor: Theme.of(context).dialogBackgroundColor,
+      context: context, 
+      builder: (BuildContext context){
+        return Dialog.fullscreen(child: TaskEditScreen(initialCollection: initialCollection, task: task ?? Task(),),);
+      });
+  }
 
   @override
   State<TaskEditScreen> createState() {
