@@ -27,11 +27,12 @@ class TaskCollection{
   @override
   int get hashCode => id.hashCode;
 
-  void removeTask(Task task){
+  bool removeTask(Task task){
     if(tasks.contains(task)){
       tasks.remove(task);
+      return true;
     } else{
-      throw Exception("Collection doesnt contain an instance of Task: ${task.title}");
+      return false;
     }
   }
 

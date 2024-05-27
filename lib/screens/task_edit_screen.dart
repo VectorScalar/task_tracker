@@ -3,21 +3,44 @@ import 'package:task_tracker/models/task.dart';
 import 'package:task_tracker/models/task_collection.dart';
 import 'package:task_tracker/widgets/task_edit_widgets/taskedit_expansiontile.dart';
 
+enum TaskOption{
+  delete('Delete', Icon(Icons.delete, color: Colors.red,)),
+  duplicate('Duplicate',  Icon(Icons.copy)),
+  move('Move',  Icon(Icons.arrow_forward));
 
+  const TaskOption(this.label, this.icon);
+
+  final String label;
+  final Icon icon;
+
+}
 
 class TaskEditScreen extends StatefulWidget {
-  const TaskEditScreen({super.key, required this.initialCollection, required this.task});
+  const TaskEditScreen({
+    super.key,
+    required this.initialCollection,
+    required this.task,
+    required this.onDeleteTask
+  });
   final Task task;
-
+  final void Function(Task task) onDeleteTask;
   final TaskCollection initialCollection;
 
-  static Future<Task?> showTaskDialog(BuildContext context, TaskCollection initialCollection, [Task? task]){
+  static Future<Task?> showTaskDialog(
+      BuildContext context, TaskCollection initialCollection, Function(Task task) onDeleteTask,
+      [Task? task]) {
     return showDialog<Task>(
-      barrierColor: Theme.of(context).dialogBackgroundColor,
-      context: context, 
-      builder: (BuildContext context){
-        return Dialog.fullscreen(child: TaskEditScreen(initialCollection: initialCollection, task: task ?? Task(),),);
-      });
+        barrierColor: Theme.of(context).dialogBackgroundColor,
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog.fullscreen(
+            child: TaskEditScreen(
+              onDeleteTask: onDeleteTask,
+              initialCollection: initialCollection,
+              task: task ?? Task(),
+            ),
+          );
+        });
   }
 
   @override
@@ -29,10 +52,12 @@ class TaskEditScreen extends StatefulWidget {
 //TODO: Add support for changing intended taskcollection
 class _TaskEditScreenState extends State<TaskEditScreen> {
   final TextEditingController _titleController = TextEditingController();
+  late TaskCollection currentCollection;
 
   @override
   void initState() {
     _titleController.text = widget.task.title;
+    currentCollection = widget.initialCollection;
     super.initState();
   }
 
@@ -121,106 +146,162 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 5,),
-        //Title text form field
-        Row(
-          children: [
-            IconButton(onPressed: () {Navigator.pop(context);}, icon: const Icon(Icons.close)),
-            Expanded(
-              child: TextFormField(
-                controller: _titleController,
-                onFieldSubmitted: (value){
-                  if(value.isEmpty)
-                  {
-                    _titleController.text = widget.task.title;
-                  } else{
-                    widget.task.title = value;
-                  }
-                  },
+    return Scaffold(
+      
+      appBar: AppBar(
+        actions:  [
+          currentCollection.tasks.contains(widget.task) ?
+          MenuAnchor(
+            alignmentOffset : const Offset(-55, 0),
+            style: const MenuStyle(
+              alignment: Alignment.bottomLeft),
+
+            menuChildren: [
+              MenuItemButton(
+                leadingIcon: TaskOption.move.icon,
+                onPressed: () {
+                  //TODO: Implement Move
+                },
+                child: Text(TaskOption.move.label),
+                ),
+              //Duplicate Menu Button
+              MenuItemButton(
+                leadingIcon: TaskOption.duplicate.icon,
+                onPressed: (){
+                  //TODO: Implement Duplicate
+                },
+                child: Text(TaskOption.duplicate.label)),
+              //Delete Menu button
+              MenuItemButton(
+                style: ButtonStyle(foregroundColor: MaterialStatePropertyAll(Colors.red)),
+                leadingIcon: TaskOption.delete.icon,
+                onPressed: (){
+                  widget.onDeleteTask(widget.task);
+                  Navigator.pop(context);
+                },
+                child: Text(TaskOption.delete.label))
+            ], 
+
+            builder: (context, controller, child){
+              return IconButton(
+                    padding: const EdgeInsets.all(15),
+                    iconSize: 28,
+                      onPressed: () {
+                        if(controller.isOpen){
+                          controller.close();
+                        } else {
+                          controller.open();
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.more_vert,
+                      ));
+            },
+          ) : const SizedBox(width: 22,)
+                  // IconButton(
+                  //   padding: EdgeInsets.all(15),
+                  //   iconSize: 28,
+                  //     onPressed: () {},
+                  //     icon: const Icon(
+                  //       Icons.more_vert,
+                  //     )),
+                      ],
                 
-              ), 
-            ),
-            const SizedBox(width: 40,)
-          ],
+        title: TextFormField(
+          controller: _titleController,
+          onFieldSubmitted: (value) {
+            if (value.isEmpty) {
+              _titleController.text = widget.task.title;
+            } else {
+              widget.task.title = value;
+            }
+          },
         ),
-        const SizedBox(
-          height: 25,
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    //TODO Work on actually implementing scheduling
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Task State"),
-                        _taskStateDropDown(),
-                      ],
-                    ),
-                    const Spacer(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Priority"),
-                        _taskPriorityDropDown(),
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text("Progress Trackers"),
-                    const Spacer(),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            widget.task.taskProgressables.add(TaskProgress());
-                          });
-                        },
-                        icon: const Icon(Icons.add))
-                  ],
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: widget.task.taskProgressables.length,
-                    itemBuilder: (context, index) {
-                      return TaskEditExpansionTile(
-                        key: ValueKey(widget.task.taskProgressables[index].id),
-                        taskProgress: widget.task.taskProgressables[index],
-                        onValueChanged: (taskProgress) {
-                          widget.task.taskProgressables[index] = taskProgress;
-                        },
-                        onDeleteTile: () {
-                          setState(() {
-                            widget.task.taskProgressables.removeAt(index);
-                          });
-                        },
-                      );
-                    },
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      //TODO Work on actually implementing scheduling
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Task State"),
+                          _taskStateDropDown(),
+                        ],
+                      ),
+                      const Spacer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Priority"),
+                          _taskPriorityDropDown(),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-                FilledButton(onPressed: (){
-                  Navigator.pop(context, widget.task);
-                }, child: SizedBox(width: MediaQuery.sizeOf(context).width,child: const Text("Save", textAlign: TextAlign.center,))),
-                const SizedBox(height: 10,)
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text("Progress Trackers"),
+                      const Spacer(),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              widget.task.taskProgressables.add(TaskProgress());
+                            });
+                          },
+                          icon: const Icon(Icons.add))
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: widget.task.taskProgressables.length,
+                      itemBuilder: (context, index) {
+                        return TaskEditExpansionTile(
+                          key:
+                              ValueKey(widget.task.taskProgressables[index].id),
+                          taskProgress: widget.task.taskProgressables[index],
+                          onValueChanged: (taskProgress) {
+                            widget.task.taskProgressables[index] = taskProgress;
+                          },
+                          onDeleteTile: () {
+                            setState(() {
+                              widget.task.taskProgressables.removeAt(index);
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  FilledButton(
+                      onPressed: () {
+                        Navigator.pop(context, widget.task);
+                      },
+                      child: SizedBox(
+                          width: MediaQuery.sizeOf(context).width,
+                          child: const Text(
+                            "Save",
+                            textAlign: TextAlign.center,
+                          ))),
+                  const SizedBox(
+                    height: 10,
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-        
-        
-        
-      ],
+        ],
+      ),
     );
   }
 }

@@ -32,7 +32,14 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
 
   final ConfirmInputManager inputManager = ConfirmInputManager(scaffoldKey);
 
-
+  void _deleteTask(Task task){
+    setState(() {
+      widget.taskCollection.removeTask(task);
+      widget.onEditCollection(widget.taskCollection);
+    });
+    
+    
+  }
   void _modifyTask(Task task) {
     if (widget.taskCollection.tasks.contains(task)) {
       setState(() {
@@ -79,12 +86,12 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
                             task: t,
                             onModifyTask: _modifyTask,
                             openTaskEdit: (task) {
-                              TaskEditScreen.showTaskDialog(context, widget.taskCollection, task).then((task){
+                              TaskEditScreen.showTaskDialog(context, widget.taskCollection, _deleteTask,task).then((task){
                                 if(task != null){
                                   setState(() {
-                                    widget.taskCollection.tasks[widget.taskCollection.tasks.indexOf(task)] = task;
+                                    widget.taskCollection.tasks[widget.taskCollection.tasks.indexOf(t)] = task;
                                   });
-                                }
+                                } 
                               });
                             },
                           ))
@@ -118,22 +125,16 @@ class _CollectionEditScreen extends State<CollectionEditScreen> {
                 },),
         actions: [
           IconButton(onPressed: () {
-              // showDialog<Task>(
-              //   barrierColor: Theme.of(context).dialogBackgroundColor,
-              //   context: context, 
-              //   builder: (BuildContext context) {
-              //   return Dialog.fullscreen(child: TaskEditScreen(initialCollection: widget.taskCollection,),);
-              // })
-              TaskEditScreen.showTaskDialog(context, widget.taskCollection).then((value){
-                if(value != null){
-                setState(() {
-                  widget.taskCollection.tasks.add(value);
-                });
-              }});
-              //TaskUtilities.showNewTaskModal(context);
-              //_openEditTaskScreen(context);
-              //Dialog.fullscreen(child: TaskEditModal(),));
-          
+              TaskEditScreen.showTaskDialog(
+                context, 
+                widget.taskCollection, 
+                _deleteTask)
+                  .then((value){
+                  if(value != null){
+                  setState(() {
+                    widget.taskCollection.tasks.add(value);
+                  });
+                }});
           }, icon: const Icon(Icons.add)),
           const SizedBox(
             width: 5,

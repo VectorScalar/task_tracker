@@ -32,6 +32,7 @@ class _TrackerState extends State<Tracker> {
             currentPageIndex = index;
           });
         }),
+       
         
     );
   }
